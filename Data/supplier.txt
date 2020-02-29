@@ -1,0 +1,4 @@
+supplier1 s00001 Nanjing
+supplier2 s00002 Miluo
+supplier3 s00003 Chengdu
+supplier4 s00004 Changsha

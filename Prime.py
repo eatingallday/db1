@@ -24,9 +24,9 @@ def haveornot(no, path, number):
 
 def display_menu():  # 主菜单
     print("-----Choose the Function-----")
-    print("1. Query")
-    print("2. Maintenance")
-    print("#. Exit System")
+    print("1. Query 查询")
+    print("2. Maintenance 维护(增删)")
+    print("#. Exit System 退出")
     print("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 
 
@@ -81,30 +81,30 @@ def query1():
 def query2():
     """
     供应红色零件给北京工程的供应商的供应商名，供应商号，供应商所在城市
-    :return:
+    :return:满足条件的供应商列表
     """
-    with open(r"./Data/part.txt", "r") as fl:  # Data文件 一行行寻找红色零件
-        part_line = fl.readline()
-        while part_line:
-            part_list = part_line.split(' ')
-            color = part_list[2]
-            if color == "red":  # 一旦找到红色零件 便记录下该零件运送给什么工程（工程号jno）
-                jno = part_list[3]
-                with open(r"./Data/project.txt", "r") as fpro:  # 工程文件中寻找 是北京的且工程号和零件运送的工程相匹配的
-                    pro_line = fpro.readline()
-                    while pro_line:
-                        pro_list = pro_line.split()
-                        if (pro_list[2] == "Beijing") & (pro_list[1] + '\n' == jno):  # 如果匹配 记录下该工程的供应商号
-                            sno = pro_list[3]
-                            with open(r"./Data/supplier.txt", "r")as fsup:  # 找到该供应商 打印结果
-                                sup_line = fsup.readline()
-                                while sup_line:
-                                    sup_list = sup_line.split()
-                                    if sup_list[1] == sno:
-                                        print(sup_line)
-                                    sup_line = fsup.readline()
-                        pro_line = fpro.readline()
-            part_line = fl.readline()
+    mark = []  # 标记已显示过的供应商
+    with open(r"./Data/supplier.txt", "r") as fsup:  # 对每一条供应商记录进行查找
+        sup_line = fsup.readline()
+        while sup_line:
+            sup_list = sup_line.split()
+            sno = sup_list[1]  # 记录下供应商号
+            with open(r"./Data/part.txt", "r") as f:
+                part_line = f.readline()
+                while part_line:
+                    part_list = part_line.split()
+                    if part_list[2] == 'red' and part_list[3] == sno:  # 红色且供应商号匹配的零件
+                        with open(r"./Data/project.txt", "r") as fp:
+                            pro_line = fp.readline()
+                            while pro_line:
+                                pro_list = pro_line.split()
+                                if pro_list[2] == 'Beijing' and pro_list[3] == sno and pro_list[3] not in mark:
+                                    print(sup_line)
+                                    mark.append(pro_list[3])
+                                    break
+                                pro_line = fp.readline()
+                    part_line = f.readline()
+            sup_line = fsup.readline()
 
 
 def query():
@@ -228,6 +228,7 @@ def delete_supplier():
                 content = f.readlines()
             with open(r"./Data/supplier.txt", "w") as fsup:
                 fsup.writelines(content)
+            print("delete successively")
 
 
 def delete_project():
@@ -251,6 +252,7 @@ def delete_project():
             content = f.readlines()
         with open(r"./Data/project.txt","w") as fpro:
             fpro.writelines(content)
+        print("delete successively")
 
 
 def delete_part():
@@ -288,6 +290,7 @@ def delete_part():
                 content = f.readlines()
             with open(r"./Data/part.txt", "w") as fpart:
                 fpart.writelines(content)
+            print("delete successively")
 
 
 def maint1():  # 维护添加

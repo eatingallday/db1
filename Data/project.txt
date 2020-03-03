@@ -1,4 +1,3 @@
-gym 100001 beijing s00001
+gym 100001 Beijing s00001
 infrustructure 100002 Suzhou s00001
-building 100003 Changsha s00003
-university 100004 Chongqing s00003
+building 100003 Beijing s00003
